@@ -19,6 +19,12 @@
                         <a class="nav-link" href="#" th:href="@{/provinces}">Provincias</a>
                     </li>
                 </ul>
+                <form th:action="@{/}" method="get" class="d-flex form-inline">
+                    <select name="lang" onchange="this.form.submit()" class="form-select">
+                        <option value="es" th:selected="${#locale.language == 'es'}">Español</option>
+                        <option value="en" th:selected="${#locale.language == 'en'}">English</option>
+                    </select>
+                </form>
             </div>
         </div>
     </nav>

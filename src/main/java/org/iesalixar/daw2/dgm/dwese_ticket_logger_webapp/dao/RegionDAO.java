@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface RegionDAO {
 
-    List<org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Region> listAllRegions() throws SQLException;
+    List<Region> listAllRegions() throws SQLException;
     void insertRegion(Region region) throws SQLException;
     void updateRegion(Region region) throws SQLException;
     void deleteRegion(int id) throws SQLException;

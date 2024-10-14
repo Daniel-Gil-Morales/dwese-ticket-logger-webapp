@@ -159,4 +159,17 @@ public class RegionController {
         }
         return "redirect:/regions"; // Redirigir a la lista de regiones
     }
+
+    @PostMapping("/delete")
+    public String deleteRegion(@RequestParam("id") int id, RedirectAttributes redirectAttributes) {
+        try {
+            regionDAO.deleteRegion(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Región eliminada con éxito.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar la región.");
+        }
+        return "redirect:/regions"; // Redirige a la lista de regiones
+    }
+
+
 }

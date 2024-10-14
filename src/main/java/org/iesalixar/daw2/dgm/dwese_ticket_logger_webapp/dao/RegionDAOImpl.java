@@ -15,15 +15,12 @@ public class RegionDAOImpl implements RegionDAO {
     // Logger para registrar eventos importantes en el DAO
     private static final Logger logger = LoggerFactory.getLogger(RegionDAOImpl.class);
 
-
     private final JdbcTemplate jdbcTemplate;
-
 
     // Inyección de JdbcTemplate
     public RegionDAOImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-
 
     /**
      * Lista todas las regiones de la base de datos.
@@ -31,13 +28,9 @@ public class RegionDAOImpl implements RegionDAO {
      */
     @Override
     public List<Region> listAllRegions() {
-        logger.info("Listing all regions from the database.");
-        String sql = "SELECT * FROM regions";
-        List<Region> regions = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Region.class));
-        logger.info("Retrieved {} regions from the database.", regions.size());
-        return regions;
+        String sql = "SELECT * FROM regions"; // Cambia esta consulta según tu modelo
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Region.class));
     }
-
 
     /**
      * Inserta una nueva región en la base de datos.
@@ -51,7 +44,6 @@ public class RegionDAOImpl implements RegionDAO {
         logger.info("Inserted region. Rows affected: {}", rowsAffected);
     }
 
-
     /**
      * Actualiza una región existente en la base de datos.
      * @param region Región a actualizar
@@ -64,7 +56,6 @@ public class RegionDAOImpl implements RegionDAO {
         logger.info("Updated region. Rows affected: {}", rowsAffected);
     }
 
-
     /**
      * Elimina una región de la base de datos.
      * @param id ID de la región a eliminar
@@ -76,7 +67,6 @@ public class RegionDAOImpl implements RegionDAO {
         int rowsAffected = jdbcTemplate.update(sql, id);
         logger.info("Deleted region. Rows affected: {}", rowsAffected);
     }
-
 
     /**
      * Recupera una región por su ID.
@@ -97,7 +87,6 @@ public class RegionDAOImpl implements RegionDAO {
         }
     }
 
-
     /**
      * Verifica si una región con el código especificado ya existe en la base de datos.
      * @param code el código de la región a verificar.
@@ -112,7 +101,6 @@ public class RegionDAOImpl implements RegionDAO {
         logger.info("Region with code: {} exists: {}", code, exists);
         return exists;
     }
-
 
     /**
      * Verifica si una región con el código especificado ya existe en la base de datos,

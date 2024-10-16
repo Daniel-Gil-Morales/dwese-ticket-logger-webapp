@@ -161,4 +161,16 @@ public class LocationController {
         }
         return "redirect:/locations"; // Redirigir a la lista de ubicaciones
     }
+
+    @GetMapping("/locations")
+    public String showLocations(Model model) {
+        // Obtiene la lista de ubicaciones desde el servicio
+        List<Location> locations = locationService.getAllLocations();
+
+        // Añade la lista de ubicaciones al modelo
+        model.addAttribute("locations", locations);
+
+        // Retorna el nombre de la vista (sin extensión)
+        return "location";
+    }
 }

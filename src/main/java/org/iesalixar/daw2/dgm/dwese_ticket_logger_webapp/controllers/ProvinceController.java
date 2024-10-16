@@ -66,9 +66,11 @@ public class ProvinceController {
      * @return El nombre de la plantilla Thymeleaf para el formulario.
      */
     @GetMapping("/new")
-    public String showNewForm(Model model) {
+    public String showNewForm(Model model) throws SQLException {
         logger.info("Mostrando formulario para nueva provincia.");
         model.addAttribute("province", new Province()); // Crear un nuevo objeto Province
+        List<Region> regions = regionDAO.listAllRegions(); // Cargar la lista de regiones
+        model.addAttribute("regions", regions); // Pasar la lista de regiones al modelo
         return "province-form"; // Nombre de la plantilla Thymeleaf para el formulario
     }
 
@@ -80,32 +82,16 @@ public class ProvinceController {
      * @return El nombre de la plantilla Thymeleaf para el formulario.
      */
     @GetMapping("/edit")
-    public String showEditForm(@RequestParam("id") int id, Model model) {
+    public String showEditForm(@RequestParam("id") int id, Model model) throws SQLException {
         logger.info("Mostrando formulario de edición para la provincia con ID {}", id);
-        Province province = null;
-        try {
-            province = provinceDAO.getProvinceById(id);
-            if (province == null) {
-                logger.warn("No se encontró la provincia con ID {}", id);
-                model.addAttribute("errorMessage", "No se encontró la provincia.");
-                return "redirect:/provinces"; // Redirigir si no se encuentra la provincia
-            }
-        } catch (SQLException e) {
-            logger.error("Error al obtener la provincia con ID {}: {}", id, e.getMessage());
-            model.addAttribute("errorMessage", "Error al obtener la provincia.");
-            return "redirect:/provinces"; // Redirigir en caso de error
+        Province province = provinceDAO.getProvinceById(id);
+        if (province == null) {
+            logger.warn("No se encontró la provincia con ID {}", id);
+            return "redirect:/provinces"; // Redirigir si no se encuentra la provincia
         }
         model.addAttribute("province", province);
-
-        // Cargar todas las regiones
-        try {
-            List<Region> regions = regionDAO.listAllRegions();
-            model.addAttribute("regions", regions);
-        } catch (SQLException e) {
-            logger.error("Error al listar las regiones: {}", e.getMessage());
-            model.addAttribute("errorMessage", "Error al listar las regiones.");
-        }
-
+        List<Region> regions = regionDAO.listAllRegions(); // Cargar la lista de regiones
+        model.addAttribute("regions", regions); // Pasar la lista de regiones al modelo
         return "province-form"; // Nombre de la plantilla Thymeleaf para el formulario
     }
 
@@ -168,4 +154,17 @@ public class ProvinceController {
         }
         return "redirect:/provinces"; // Redirigir a la lista de provincias
     }
+
+    @PostMapping("/delete")
+    public String deleteProvince(@RequestParam("id") int id, RedirectAttributes redirectAttributes) {
+        try {
+            provinceDAO.deleteProvince(id); // Asegúrate de que provinceDAO esté inyectado correctamente
+            redirectAttributes.addFlashAttribute("successMessage", "Provincia eliminada con éxito.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar la provincia: " + e.getMessage());
+            logger.error("Error al eliminar la provincia con ID {}: {}", id, e.getMessage());
+        }
+        return "redirect:/provinces"; // Redirigir a la lista de provincias
+    }
+
 }

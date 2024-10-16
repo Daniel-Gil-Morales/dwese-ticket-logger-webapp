@@ -8,7 +8,8 @@
 
 <main class="container mt-5">
     <!-- Usamos la clave msg.region-form.add o msg.region-form.edit dependiendo de si es agregar o editar -->
-    <h1 th:text="${region.id == null ? '#{msg.region-form.add}' : '#{msg.region-form.edit}'}"></h1>
+    <h1 th:text="#{msg.region-form.edit}"></h1>
+
 
     <!-- Mostrar un mensaje de error si existe -->
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
@@ -32,7 +33,7 @@
         </div>
 
         <!-- Usamos la clave msg.region-form.create o msg.region-form.update dependiendo de si es agregar o editar -->
-        <button type="submit" class="btn btn-primary" th:text="${region.id == null ? '#{msg.region-form.create}' : '#{msg.region-form.update}'}"></button>
+        <button type="submit" class="btn btn-primary" th:text="#{msg.region-form.update}"></button>
     </form>
 
     <!-- Usamos la clave msg.region-form.returnback para el botón de volver a la lista -->

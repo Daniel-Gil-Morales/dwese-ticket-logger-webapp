@@ -8,7 +8,7 @@
 
 <main class="container mt-5">
     <!-- Usamos la clave msg.province-form.add o msg.province-form.edit dependiendo de si es agregar o editar -->
-    <h1 th:text="${province.id == null ? '#{msg.province-form.add}' : '#{msg.province-form.edit}'}"></h1>
+    <h1 th:text="#{msg.province-form.edit}"></h1>
 
     <!-- Mostrar un mensaje de error si existe -->
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
@@ -32,19 +32,20 @@
         </div>
 
         <div class="mb-3">
-            <label for="region" class="form-label" th:text="#{msg.province.form.region}"></label>
+            <!-- Usamos la clave msg.province-form.region para el campo Región -->
+            <label for="region" class="form-label" th:text="#{msg.province-form.region}"></label>
             <select th:field="*{region.id}" id="region" class="form-select">
-                <option value="" disabled selected>Seleccione una región</option> <!-- Opción por defecto -->
+                <option value="" th:text="#{msg.province-form.selectRegion}"></option>
                 <option th:each="region : ${regions}"
                         th:value="${region.id}"
                         th:text="${region.name}"
-                        th:selected="${region.id == province.region?.id}"></option> <!-- Usar el operador de navegación segura -->
+                        th:selected="${region.id == province.region.id}"></option>
             </select>
-            <div th:if="${#fields.hasErrors('region')}" class="text-danger" th:errors="*{region.id}"></div>
+            <div th:if="${#fields.hasErrors('region')}" class="text-danger" th:errors="*{region}"></div>
         </div>
 
         <!-- Usamos la clave msg.province-form.create o msg.province-form.update dependiendo de si es agregar o editar -->
-        <button type="submit" class="btn btn-primary" th:text="${province.id == null ? '#{msg.province-form.create}' : '#{msg.province-form.update}'}"></button>
+        <button type="submit" class="btn btn-primary" th:text="#{msg.province-form.update}"></button>
     </form>
 
     <!-- Usamos la clave msg.province-form.returnback para el botón de volver a la lista -->

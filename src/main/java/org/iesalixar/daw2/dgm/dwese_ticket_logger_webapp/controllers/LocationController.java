@@ -3,8 +3,10 @@ package org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.controllers;
 import jakarta.validation.Valid;
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao.LocationDAO;
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao.ProvinceDAO; // Inyectar el DAO de provincias
+import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao.SuperMarketDAO;
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Location;
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Province;
+import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.SuperMarket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class LocationController {
     private static final Logger logger = LoggerFactory.getLogger(LocationController.class);
 
     @Autowired
+    private SuperMarketDAO superMarketDAO;
+
+    @Autowired
     private LocationDAO locationDAO;
 
     @Autowired
@@ -37,6 +42,7 @@ public class LocationController {
 
     @Autowired
     private MessageSource messageSource;
+
 
     /**
      * Lista todas las ubicaciones y las pasa como atributo al modelo para que sean accesibles en la vista `location.html`.
@@ -61,6 +67,29 @@ public class LocationController {
         return "location";
     }
 
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable("id") int id, Model model) throws SQLException {
+        logger.info("Mostrando formulario de edición para la ubicación con ID {}", id);
+
+        // Cargar la ubicación por ID
+        Location location = locationDAO.getLocationById(id);
+        if (location == null) {
+            logger.warn("No se encontró la ubicación con ID {}", id);
+            return "redirect:/locations"; // Redirigir si no se encuentra la ubicación
+        }
+
+        // Obtener la lista de supermercados para el select
+        List<SuperMarket> supermarkets = superMarketDAO.listAllSuperMarkets();
+        model.addAttribute("supermarkets", supermarkets); // Agregar la lista de supermercados al modelo
+
+        // Obtener la lista de provincias
+        List<Province> provinces = provinceDAO.listAllProvinces(); // Asegúrate de tener este método en tu DAO
+        model.addAttribute("provinces", provinces); // Agregar la lista de provincias al modelo
+
+        model.addAttribute("location", location); // Agregar la ubicación al modelo
+        return "location-form"; // Nombre de la plantilla Thymeleaf para el formulario
+    }
+
     /**
      * Muestra el formulario para crear una nueva ubicación.
      *
@@ -73,31 +102,6 @@ public class LocationController {
         model.addAttribute("location", new Location()); // Crear un nuevo objeto Location
         List<Province> provinces = provinceDAO.listAllProvinces(); // Cargar la lista de provincias
         model.addAttribute("provinces", provinces); // Pasar la lista de provincias al modelo
-        return "location-form"; // Nombre de la plantilla Thymeleaf para el formulario
-    }
-
-    /**
-     * Muestra el formulario para editar una ubicación existente.
-     *
-     * @param id    ID de la ubicación a editar.
-     * @param model Modelo para pasar datos a la vista.
-     * @return El nombre de la plantilla Thymeleaf para el formulario.
-     */
-    @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") int id, Model model) throws SQLException {
-        logger.info("Mostrando formulario de edición para la ubicación con ID {}", id);
-
-        // Cargar la ubicación por ID
-        Location location = locationDAO.getLocationById(id);
-        if (location == null) {
-            logger.warn("No se encontró la ubicación con ID {}", id);
-            return "redirect:/locations"; // Redirigir si no se encuentra la ubicación
-        }
-
-        model.addAttribute("location", location); // Agregar la ubicación al modelo
-        List<Province> provinces = provinceDAO.listAllProvinces(); // Cargar la lista de provincias
-        model.addAttribute("provinces", provinces); // Pasar la lista de provincias al modelo
-
         return "location-form"; // Nombre de la plantilla Thymeleaf para el formulario
     }
 
@@ -134,7 +138,8 @@ public class LocationController {
      * @return Redirección a la lista de ubicaciones.
      */
     @PostMapping("/update")
-    public String updateLocation(@Valid @ModelAttribute("location") Location location, BindingResult result, RedirectAttributes redirectAttributes, Locale locale) {
+    public String updateLocation(@Valid @ModelAttribute("location") Location location,
+                                 BindingResult result, RedirectAttributes redirectAttributes, Locale locale) {
         logger.info("Actualizando ubicación con ID {}", location.getId());
         try {
             if (result.hasErrors()) {
@@ -168,5 +173,4 @@ public class LocationController {
         }
         return "redirect:/locations"; // Redirigir a la lista de ubicaciones
     }
-
 }

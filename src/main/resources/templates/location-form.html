@@ -13,8 +13,7 @@
     <!-- Mostrar un mensaje de error si existe -->
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
-    <form th:action="${location.id == null} ? @{/locations/insert} : @{/locations/update}"
-          th:object="${location}" method="post" class="mt-4">
+    <form th:action="@{/locations/update}" th:object="${location}" method="post" class="mt-4">
         <input type="hidden" th:field="*{id}" />
 
         <div class="mb-3">
@@ -42,6 +41,19 @@
                         th:selected="${province.id == location.province.id}"></option>
             </select>
             <div th:if="${#fields.hasErrors('province')}" class="text-danger" th:errors="*{province}"></div>
+        </div>
+
+        <div class="mb-3">
+            <!-- Usamos la clave msg.location-form.supermarket para el campo Supermercado -->
+            <label for="supermarket" class="form-label" th:text="#{msg.location-form.supermarket}"></label>
+            <select th:field="*{supermarket.id}" id="supermarket" class="form-select">
+                <option value="" th:text="#{msg.location-form.selectSupermarket}"></option>
+                <option th:each="supermarket : ${supermarkets}"
+                        th:value="${supermarket.id}"
+                        th:text="${supermarket.name}"
+                        th:selected="${supermarket.id == location.supermarket.id}"></option>
+            </select>
+            <div th:if="${#fields.hasErrors('supermarket')}" class="text-danger" th:errors="*{supermarket}"></div>
         </div>
 
         <!-- Usamos la clave msg.location-form.create o msg.location-form.update dependiendo de si es agregar o editar -->

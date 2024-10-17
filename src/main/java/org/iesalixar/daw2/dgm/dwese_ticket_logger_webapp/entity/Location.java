@@ -28,4 +28,7 @@ public class Location {
     // Relación con la entidad `Province`
     private Province province;
 
+    // Relación con la entidad `SuperMarket`
+    private SuperMarket supermarket;
+
 }

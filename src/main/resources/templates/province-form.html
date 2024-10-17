@@ -1,55 +1,48 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head ('Ticket Logger - Insert/Update Province')"></head>
+<head th:replace="fragments/head :: head ('Ticket Logger - Insert/Update Location')"></head>
 <body>
 
 <!-- Incluir el fragmento del header -->
 <header th:replace="fragments/header :: header"></header>
 
 <main class="container mt-5">
-    <!-- Usamos la clave msg.province-form.add o msg.province-form.edit dependiendo de si es agregar o editar -->
-    <h1 th:text="#{msg.province-form.edit}"></h1>
+    <h1 th:text="#{msg.location-form.edit}"></h1>
 
-    <!-- Mostrar un mensaje de error si existe -->
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
-    <form th:action="${province.id == null} ? @{/provinces/insert} : @{/provinces/update}"
-          th:object="${province}" method="post" class="mt-4">
+    <form th:action="${location.id == null} ? @{/locations/insert} : @{/locations/update}"
+          th:object="${location}" method="post" class="mt-4">
         <input type="hidden" th:field="*{id}" />
 
         <div class="mb-3">
-            <!-- Usamos la clave msg.province-form.code para el campo Código -->
-            <label for="code" class="form-label" th:text="#{msg.province-form.code}"></label>
-            <input type="text" th:field="*{code}" id="code" class="form-control"  />
-            <div th:if="${#fields.hasErrors('code')}" class="text-danger" th:errors="*{code}"></div>
+            <label for="address" class="form-label" th:text="#{msg.location-form.address}"></label>
+            <input type="text" th:field="*{address}" id="address" class="form-control"  />
+            <div th:if="${#fields.hasErrors('address')}" class="text-danger" th:errors="*{address}"></div>
         </div>
 
         <div class="mb-3">
-            <!-- Usamos la clave msg.province-form.name para el campo Nombre -->
-            <label for="name" class="form-label" th:text="#{msg.province-form.name}"></label>
-            <input type="text" th:field="*{name}" id="name" class="form-control"  />
-            <div th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}"></div>
+            <label for="city" class="form-label" th:text="#{msg.location-form.city}"></label>
+            <input type="text" th:field="*{city}" id="city" class="form-control"  />
+            <div th:if="${#fields.hasErrors('city')}" class="text-danger" th:errors="*{city}"></div>
         </div>
 
         <div class="mb-3">
-            <!-- Usamos la clave msg.province-form.region para el campo Región -->
-            <label for="region" class="form-label" th:text="#{msg.province-form.region}"></label>
-            <select th:field="*{region.id}" id="region" class="form-select">
-                <option value="" th:text="#{msg.province-form.selectRegion}"></option>
-                <option th:each="region : ${regions}"
-                        th:value="${region.id}"
-                        th:text="${region.name}"
-                        th:selected="${region.id == province.region.id}"></option>
+            <label for="province" class="form-label" th:text="#{msg.location-form.province}"></label>
+            <select th:field="*{province.id}" id="province" class="form-select">
+                <option value="" th:text="#{msg.location-form.selectProvince}"></option>
+                <option th:each="province : ${provinces}"
+                        th:value="${province.id}"
+                        th:text="${province.name}"
+                        th:selected="${province.id == location.province.id}"></option>
             </select>
-            <div th:if="${#fields.hasErrors('region')}" class="text-danger" th:errors="*{region}"></div>
+            <div th:if="${#fields.hasErrors('province')}" class="text-danger" th:errors="*{province}"></div>
         </div>
 
-        <!-- Usamos la clave msg.province-form.create o msg.province-form.update dependiendo de si es agregar o editar -->
-        <button type="submit" class="btn btn-primary" th:text="#{msg.province-form.update}"></button>
+        <button type="submit" class="btn btn-primary" th:text="#{msg.location-form.update}"></button>
     </form>
 
-    <!-- Usamos la clave msg.province-form.returnback para el botón de volver a la lista -->
-    <a href="#" th:href="@{/provinces}" class="btn btn-secondary mt-3" th:text="#{msg.province-form.returnback}"></a>
+    <a href="#" th:href="@{/locations}" class="btn btn-secondary mt-3" th:text="#{msg.location.form.returnback}"></a>
 </main>
 
 <!-- Incluir el fragmento del footer -->

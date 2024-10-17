@@ -8,7 +8,7 @@
 
 <main class="container mt-5">
     <!-- Usamos la clave msg.location-form.add o msg.location-form.edit dependiendo de si es agregar o editar -->
-    <h1 th:text="${location.id == null ? '#{msg.location-form.add}' : '#{msg.location-form.edit}'}"></h1>
+    <h1 th:text="#{msg.location-form.edit}"></h1>
 
     <!-- Mostrar un mensaje de error si existe -->
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
@@ -18,17 +18,17 @@
         <input type="hidden" th:field="*{id}" />
 
         <div class="mb-3">
-            <!-- Usamos la clave msg.location-form.name para el campo Nombre -->
-            <label for="name" class="form-label" th:text="#{msg.location-form.name}"></label>
-            <input type="text" th:field="*{name}" id="name" class="form-control" />
-            <div th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}"></div>
-        </div>
-
-        <div class="mb-3">
             <!-- Usamos la clave msg.location-form.address para el campo Dirección -->
             <label for="address" class="form-label" th:text="#{msg.location-form.address}"></label>
             <input type="text" th:field="*{address}" id="address" class="form-control" />
             <div th:if="${#fields.hasErrors('address')}" class="text-danger" th:errors="*{address}"></div>
+        </div>
+
+        <div class="mb-3">
+            <!-- Usamos la clave msg.location-form.name para el campo Nombre -->
+            <label for="city" class="form-label" th:text="#{msg.location-form.name}"></label>
+            <input type="text" th:field="*{city}" id="city" class="form-control" />
+            <div th:if="${#fields.hasErrors('city')}" class="text-danger" th:errors="*{city}"></div>
         </div>
 
         <div class="mb-3">
@@ -45,7 +45,7 @@
         </div>
 
         <!-- Usamos la clave msg.location-form.create o msg.location-form.update dependiendo de si es agregar o editar -->
-        <button type="submit" class="btn btn-primary" th:text="${location.id == null ? '#{msg.location-form.create}' : '#{msg.location-form.update}'}"></button>
+        <button type="submit" class="btn btn-primary" th:text="#{msg.location-form.update}"></button>
     </form>
 
     <!-- Usamos la clave msg.location-form.returnback para el botón de volver a la lista -->

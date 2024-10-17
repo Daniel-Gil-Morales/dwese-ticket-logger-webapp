@@ -4,7 +4,6 @@ import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Location;
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Province;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -34,7 +33,7 @@ public class LocationDAOImpl implements LocationDAO {
     public List<Location> listAllLocations() {
         logger.info("Listing all locations from the database.");
         String sql = "SELECT l.*, p.code AS province_code, p.name AS province_name " +
-                "FROM locations l JOIN provinces p ON l.id_province = p.id";
+                "FROM locations l JOIN provinces p ON l.province_id = p.id";
         List<Location> locations = jdbcTemplate.query(sql, new LocationRowMapper());
         logger.info("Retrieved {} locations from the database.", locations.size());
         return locations;
@@ -47,7 +46,7 @@ public class LocationDAOImpl implements LocationDAO {
     @Override
     public void insertLocation(Location location) {
         logger.info("Inserting location with address: {} and city: {}", location.getAddress(), location.getCity());
-        String sql = "INSERT INTO locations (address, city, id_province) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO locations (address, city, province_id) VALUES (?, ?, ?)";
         int rowsAffected = jdbcTemplate.update(sql, location.getAddress(), location.getCity(), location.getProvince().getId());
         logger.info("Inserted location. Rows affected: {}", rowsAffected);
     }
@@ -57,10 +56,16 @@ public class LocationDAOImpl implements LocationDAO {
      * @param location Ubicación a actualizar
      */
     @Override
-    public void updateLocation(Location location) {
+    public void updateLocation(Location location) throws SQLException {
         logger.info("Updating location with id: {}", location.getId());
-        String sql = "UPDATE locations SET address = ?, city = ?, id_province = ? WHERE id = ?";
+        String sql = "UPDATE locations SET address = ?, city = ?, province_id = ? WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql, location.getAddress(), location.getCity(), location.getProvince().getId(), location.getId());
+
+        if (rowsAffected == 0) {
+            logger.warn("No location found with id: {}", location.getId());
+            throw new SQLException("No location found with ID: " + location.getId());
+        }
+
         logger.info("Updated location. Rows affected: {}", rowsAffected);
     }
 
@@ -85,7 +90,7 @@ public class LocationDAOImpl implements LocationDAO {
     public Location getLocationById(int id) {
         logger.info("Retrieving location by id: {}", id);
         String sql = "SELECT l.*, p.code AS province_code, p.name AS province_name " +
-                "FROM locations l JOIN provinces p ON l.id_province = p.id WHERE l.id = ?";
+                "FROM locations l JOIN provinces p ON l.province_id = p.id WHERE l.id = ?";
         try {
             Location location = jdbcTemplate.queryForObject(sql, new LocationRowMapper(), id);
             logger.info("Location retrieved: {} - {}", location.getAddress(), location.getCity());
@@ -108,7 +113,7 @@ public class LocationDAOImpl implements LocationDAO {
             location.setCity(rs.getString("city"));
 
             Province province = new Province();
-            province.setId(rs.getInt("id_province"));
+            province.setId(rs.getInt("province_id"));
             province.setCode(rs.getString("province_code"));
             province.setName(rs.getString("province_name"));
             location.setProvince(province);

@@ -30,12 +30,12 @@
         <tbody>
         <tr th:each="location : ${listLocations}">
             <td th:text="${location.id}"></td>
-            <td th:text="${location.name}"></td>
+            <td th:text="${location.city}"></td>
             <td th:text="${location.address}"></td>
             <td th:text="${location.province.name}"></td>
             <td>
                 <!-- Usamos la clave msg.location.edit para el botón de editar -->
-                <a th:href="@{/locations/edit(id=${location.id})}" class="btn btn-primary btn-sm" th:text="#{msg.location.edit}"></a>
+                <a th:href="@{/locations/edit/{id}(id=${location.id})}" class="btn btn-primary btn-sm" th:text="#{msg.location.edit}"></a>
                 <!-- Usamos la clave msg.location.delete para el botón de eliminar -->
                 <form th:action="@{/locations/delete}" method="post" class="d-inline">
                     <input type="hidden" name="id" th:value="${location.id}"/>

@@ -44,19 +44,21 @@ public class LocationController {
      * @param model Objeto del modelo para pasar datos a la vista.
      * @return El nombre de la plantilla Thymeleaf para renderizar la lista de ubicaciones.
      */
-    @GetMapping
+    @GetMapping("")
     public String listLocations(Model model) {
-        logger.info("Solicitando la lista de todas las ubicaciones...");
-        List<Location> listLocations = null;
+        List<Location> listLocations;
         try {
+            logger.info("Obteniendo la lista de ubicaciones.");
             listLocations = locationDAO.listAllLocations();
-            logger.info("Se han cargado {} ubicaciones.", listLocations.size());
+            logger.info("Número de ubicaciones obtenidas: {}", listLocations.size());
+            model.addAttribute("locations", listLocations);
         } catch (SQLException e) {
-            logger.error("Error al listar las ubicaciones: {}", e.getMessage());
-            model.addAttribute("errorMessage", "Error al listar las ubicaciones.");
+            model.addAttribute("errorMessage", "Error al cargar las ubicaciones.");
+            logger.error("Error al cargar las ubicaciones: {}", e.getMessage());
+            return "location"; // Retorna a la vista para mostrar el error
         }
-        model.addAttribute("listLocations", listLocations); // Pasar la lista de ubicaciones al modelo
-        return "location"; // Nombre de la plantilla Thymeleaf a renderizar
+        model.addAttribute("listLocations", listLocations);
+        return "location";
     }
 
     /**
@@ -81,19 +83,24 @@ public class LocationController {
      * @param model Modelo para pasar datos a la vista.
      * @return El nombre de la plantilla Thymeleaf para el formulario.
      */
-    @GetMapping("/edit")
-    public String showEditForm(@RequestParam("id") int id, Model model) throws SQLException {
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable("id") int id, Model model) throws SQLException {
         logger.info("Mostrando formulario de edición para la ubicación con ID {}", id);
+
+        // Cargar la ubicación por ID
         Location location = locationDAO.getLocationById(id);
         if (location == null) {
             logger.warn("No se encontró la ubicación con ID {}", id);
             return "redirect:/locations"; // Redirigir si no se encuentra la ubicación
         }
-        model.addAttribute("location", location);
+
+        model.addAttribute("location", location); // Agregar la ubicación al modelo
         List<Province> provinces = provinceDAO.listAllProvinces(); // Cargar la lista de provincias
         model.addAttribute("provinces", provinces); // Pasar la lista de provincias al modelo
+
         return "location-form"; // Nombre de la plantilla Thymeleaf para el formulario
     }
+
 
     /**
      * Inserta una nueva ubicación en la base de datos.
@@ -162,15 +169,4 @@ public class LocationController {
         return "redirect:/locations"; // Redirigir a la lista de ubicaciones
     }
 
-    @GetMapping("/locations")
-    public String showLocations(Model model) {
-        // Obtiene la lista de ubicaciones desde el servicio
-        List<Location> locations = locationService.getAllLocations();
-
-        // Añade la lista de ubicaciones al modelo
-        model.addAttribute("locations", locations);
-
-        // Retorna el nombre de la vista (sin extensión)
-        return "location";
-    }
 }

@@ -25,7 +25,7 @@ public class SuperMarketDAOImpl implements SuperMarketDAO {
     @Override
     public List<SuperMarket> listAllSuperMarkets() {
         logger.info("Listing all supermarkets from the database.");
-        String sql = "SELECT sm.*, l.address FROM supermarkets sm " +
+        String sql = "SELECT DISTINCT sm.*, l.address FROM supermarkets sm " +
                 "JOIN locations l ON sm.id = l.supermarket_id"; // Asegúrate de que la clave foránea esté correctamente referenciada
         List<SuperMarket> superMarkets = jdbcTemplate.query(sql, new SuperMarketRowMapper());
         logger.info("Retrieved {} supermarkets from the database.", superMarkets.size());

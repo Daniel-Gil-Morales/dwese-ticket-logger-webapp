@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head ('Ticket Logger - Listado de Supermercados')"></head>
+<head th:replace="~{fragments/head :: head ('Ticket Logger - Listado de Supermercados')}">
+    <!-- Incluye Bootstrap CSS si aún no lo tienes -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
 <body>
 
 <!-- Incluir el fragmento del header -->
-<header th:replace="fragments/header :: header"></header>
+<header th:replace="~{fragments/header :: header}"></header>
 
 <main class="container mt-5">
     <!-- Usamos la clave msg.supermarket.title para el título -->
@@ -27,7 +30,6 @@
             <!-- Usamos las claves de i18n para las cabeceras de las columnas -->
             <th th:text="#{msg.supermarket.id}"></th>
             <th th:text="#{msg.supermarket.name}"></th>
-            <th th:text="#{msg.supermarket.location_es}"></th> <!-- Columna para Location -->
             <th th:text="#{msg.supermarket.actions}"></th>
         </tr>
         </thead>
@@ -35,7 +37,6 @@
         <tr th:each="supermarket : ${listSupermarkets}">
             <td th:text="${supermarket.id}"></td>
             <td th:text="${supermarket.name}"></td>
-            <td th:text="${supermarket.location.address}"></td> <!-- Mostrar la dirección de la Location -->
             <td>
                 <!-- Usamos la clave msg.supermarket.edit para el botón de editar -->
                 <a th:href="@{/supermarkets/edit/{id}(id=${supermarket.id})}" class="btn btn-primary btn-sm" th:text="#{msg.supermarket.edit}"></a>
@@ -59,7 +60,12 @@
 </main>
 
 <!-- Incluir el fragmento del footer -->
-<footer th:replace="fragments/footer :: footer"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<!-- Incluye Bootstrap JS y jQuery si los necesitas -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

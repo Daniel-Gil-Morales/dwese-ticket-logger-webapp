@@ -40,13 +40,10 @@ public class SuperMarketController {
      * @return El nombre de la plantilla Thymeleaf para renderizar la lista de supermercados.
      */
     @GetMapping("")
-    public String listSuperMarkets(Model model) {
-        List<SuperMarket> listSuperMarkets;
-        logger.info("Obteniendo la lista de supermercados.");
-        listSuperMarkets = superMarketDAO.listAllSuperMarkets();
-        logger.info("Número de supermercados obtenidos: {}", listSuperMarkets.size());
-        model.addAttribute("listSuperMarkets", listSuperMarkets);
-        return "supermarket";
+    public String listSupermarkets(Model model) {
+        List<SuperMarket> listSuperMarkets = superMarketDAO.listAllSuperMarkets();
+        model.addAttribute("listSupermarkets", listSuperMarkets);
+        return "supermarket"; // Asegúrate de que este nombre coincide con tu plantilla
     }
 
     /**

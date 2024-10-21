@@ -45,7 +45,6 @@ public class SuperMarketController {
         logger.info("Obteniendo la lista de supermercados.");
         listSuperMarkets = superMarketDAO.listAllSuperMarkets();
         logger.info("Número de supermercados obtenidos: {}", listSuperMarkets.size());
-        model.addAttribute("supermarkets", listSuperMarkets);
         model.addAttribute("listSuperMarkets", listSuperMarkets);
         return "supermarket";
     }

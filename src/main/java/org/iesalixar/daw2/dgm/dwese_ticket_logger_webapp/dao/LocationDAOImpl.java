@@ -30,7 +30,7 @@ public class LocationDAOImpl implements LocationDAO {
         String sql = "SELECT l.*, p.code AS province_code, p.name AS province_name, s.id AS supermarket_id, s.name AS supermarket_name " +
                 "FROM locations l " +
                 "JOIN provinces p ON l.province_id = p.id " +
-                "LEFT JOIN supermarkets s ON l.supermarket_id = s.id"; // Asegúrate de hacer un LEFT JOIN con SuperMarket
+                "JOIN supermarkets s ON l.supermarket_id = s.id"; // Asegúrate de hacer un LEFT JOIN con SuperMarket
         List<Location> locations = jdbcTemplate.query(sql, new LocationRowMapper());
         logger.info("Retrieved {} locations from the database.", locations.size());
         return locations;

@@ -21,7 +21,4 @@ public class SuperMarket {
     @Size(max = 100, message = "{msg.supermarket.name.size}")
     private String name;
 
-    // Relación con la entidad `Location`
-    // Puedes agregar la relación si es necesario, pero es opcional aquí
-    // private List<Location> locations; // si un SuperMarket puede tener varias Locations
 }

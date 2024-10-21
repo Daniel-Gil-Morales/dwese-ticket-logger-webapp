@@ -15,8 +15,13 @@
         <p th:text="${errorMessage}"></p>
     </div>
 
+    <!-- Muestra un mensaje si no hay supermercados -->
+    <div th:if="${#lists.isEmpty(listSupermarkets)}" class="alert alert-warning">
+        <p>No hay supermercados disponibles.</p>
+    </div>
+
     <!-- Muestra la lista de supermercados en una tabla -->
-    <table class="table table-bordered mt-3">
+    <table class="table table-bordered mt-3" th:if="${not #lists.isEmpty(listSupermarkets)}">
         <thead>
         <tr>
             <!-- Usamos las claves de i18n para las cabeceras de las columnas -->
@@ -50,7 +55,7 @@
     <a th:href="@{/supermarkets/new}" class="btn btn-success mt-3" th:text="#{msg.supermarket.add}"></a>
 
     <!-- Volver a la página principal -->
-    <a href="#" th:href="@{/}" class="btn btn-secondary mt-3">Back to Home</a>
+    <a th:href="@{/}" class="btn btn-secondary mt-3">Back to Home</a>
 </main>
 
 <!-- Incluir el fragmento del footer -->

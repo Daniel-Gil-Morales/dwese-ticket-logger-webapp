@@ -41,7 +41,7 @@ public class SuperMarketController {
      */
     @GetMapping("")
     public String listSupermarkets(Model model) {
-        List<SuperMarket> listSuperMarkets = superMarketDAO.listAllSuperMarkets();
+        List<SuperMarket> listSuperMarkets = superMarketDAO.listAllSupermarkets();
         model.addAttribute("listSupermarkets", listSuperMarkets);
         return "supermarket"; // Asegúrate de que este nombre coincide con tu plantilla
     }
@@ -82,47 +82,31 @@ public class SuperMarketController {
     }
 
 
-    /**
-     * Inserta un nuevo supermercado en la base de datos.
-     *
-     * @param superMarket        Objeto que contiene los datos del formulario.
-     * @param redirectAttributes Atributos para mensajes flash de redirección.
-     * @return Redirección a la lista de supermercados.
-     */
     @PostMapping("/insert")
-    public String insertSuperMarket(@Valid @ModelAttribute("supermarket") SuperMarket superMarket,
-                                    BindingResult result, RedirectAttributes redirectAttributes, Locale locale) {
-        logger.info("Insertando nuevo supermercado: {}", superMarket.getName());
+    public String insertSupermarket(@Valid SuperMarket supermarket, BindingResult result, Model model, Locale locale) throws SQLException {
         if (result.hasErrors()) {
-            return "supermarket-form";  // Devuelve el formulario para mostrar los errores de validación
+            logger.warn("Errores en el formulario de inserción de supermercado: {}", result.getFieldErrors());
+            return "supermarket-form";
         }
-        superMarketDAO.insertSuperMarket(superMarket);
-        logger.info("Supermercado {} insertado con éxito.", superMarket.getName());
-        return "redirect:/supermarkets"; // Redirigir a la lista de supermercados
+        superMarketDAO.insertSuperMarket(supermarket);
+        logger.info("Supermercado insertado correctamente: {}", supermarket.getName());
+        return "redirect:/supermarkets";
     }
 
-    /**
-     * Actualiza un supermercado existente en la base de datos.
-     *
-     * @param superMarket        Objeto que contiene los datos del formulario.
-     * @param redirectAttributes Atributos para mensajes flash de redirección.
-     * @return Redirección a la lista de supermercados.
-     */
+
     @PostMapping("/update")
-    public String updateSuperMarket(@Valid @ModelAttribute("supermarket") SuperMarket superMarket,
-                                    BindingResult result, RedirectAttributes redirectAttributes, Locale locale) {
-        logger.info("Actualizando supermercado con ID {}", superMarket.getId());
-        try {
-            if (result.hasErrors()) {
-                return "supermarket-form";  // Devuelve el formulario para mostrar los errores de validación
-            }
-            superMarketDAO.updateSuperMarket(superMarket);
-            logger.info("Supermercado con ID {} actualizado con éxito.", superMarket.getId());
-        } catch (SQLException e) {
-            logger.error("Error al actualizar el supermercado con ID {}: {}", superMarket.getId(), e.getMessage());
-            String errorMessage = messageSource.getMessage("msg.supermarket-controller.update.error", null, locale);
-            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+    public String updateSupermarket(@Valid @ModelAttribute("supermarket") SuperMarket supermarket,
+                                    BindingResult result, Model model) throws SQLException {
+        if (result.hasErrors()) {
+            model.addAttribute("errorMessage", "Por favor corrige los errores en el formulario.");
+            return "supermarket-form"; // Reenviar al formulario
         }
+
+        // Aquí puedes añadir lógica para verificar si el ID ha cambiado
+        // y manejarlo según sea necesario.
+
+        superMarketDAO.updateSuperMarket(supermarket); // Actualizar supermercado
+        model.addAttribute("successMessage", "Supermercado actualizado correctamente.");
         return "redirect:/supermarkets"; // Redirigir a la lista de supermercados
     }
 

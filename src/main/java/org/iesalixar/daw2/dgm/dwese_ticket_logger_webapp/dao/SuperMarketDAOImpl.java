@@ -3,6 +3,7 @@ package org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao;
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.SuperMarket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -23,34 +24,27 @@ public class SuperMarketDAOImpl implements SuperMarketDAO {
     }
 
     @Override
-    public List<SuperMarket> listAllSuperMarkets() {
-        logger.info("Listing all supermarkets from the database.");
-        String sql = "SELECT DISTINCT sm.*, l.address FROM supermarkets sm " +
-                "JOIN locations l ON sm.id = l.supermarket_id"; // Asegúrate de que la clave foránea esté correctamente referenciada
-        List<SuperMarket> superMarkets = jdbcTemplate.query(sql, new SuperMarketRowMapper());
-        logger.info("Retrieved {} supermarkets from the database.", superMarkets.size());
-        return superMarkets;
+    public List<SuperMarket> listAllSupermarkets() {
+        logger.info("Listando todos los supermercados desde la base de datos.");
+        String sql = "SELECT * FROM supermarkets";
+        List<SuperMarket> supermarkets = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(SuperMarket.class));
+        logger.info("Se han recuperado {} supermercados de la base de datos.", supermarkets.size());
+        return supermarkets;
+
     }
 
     @Override
-    public void insertSuperMarket(SuperMarket superMarket) {
-        logger.info("Inserting supermarket with name: {}", superMarket.getName());
-        String sql = "INSERT INTO supermarkets (name) VALUES (?)";
-        int rowsAffected = jdbcTemplate.update(sql, superMarket.getName());
-        logger.info("Inserted supermarket. Rows affected: {}", rowsAffected);
+    public void insertSuperMarket(SuperMarket supermarket) {
+        logger.info("Insertando un nuevo supermercado con ID: {} y nombre: {}", supermarket.getId(), supermarket.getName());
+        String sql = "INSERT INTO supermarkets (id, name) VALUES (?, ?)";
+
+        int rowsAffected = jdbcTemplate.update(sql, supermarket.getId(), supermarket.getName());
     }
 
-    @Override
-    public void updateSuperMarket(SuperMarket superMarket) throws SQLException {
-        logger.info("Updating supermarket with id: {}", superMarket.getId());
-        String sql = "UPDATE supermarkets SET name = ? WHERE id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, superMarket.getName(), superMarket.getId());
-
-        if (rowsAffected == 0) {
-            logger.warn("No supermarket found with id: {}", superMarket.getId());
-            throw new SQLException("No supermarket found with ID: " + superMarket.getId());
-        }
-
+    public void updateSuperMarket(SuperMarket supermarket) {
+        logger.info("Updating supermarket with new id: {} and name: {}", supermarket.getId(), supermarket.getName());
+        String sql = "UPDATE supermarkets SET id = ?, name = ? WHERE id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, supermarket.getId(), supermarket.getName(), supermarket.getId());
         logger.info("Updated supermarket. Rows affected: {}", rowsAffected);
     }
 

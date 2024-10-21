@@ -21,4 +21,7 @@ public class SuperMarket {
     @Size(max = 100, message = "{msg.supermarket.name.size}")
     private String name;
 
+    public SuperMarket(String name){
+        this.name=name;
+    }
 }

@@ -79,12 +79,15 @@ public class LocationController {
         }
 
         // Obtener la lista de supermercados para el select
-        List<SuperMarket> supermarkets = superMarketDAO.listAllSuperMarkets();
+        List<SuperMarket> supermarkets = superMarketDAO.listAllSupermarkets();
         model.addAttribute("supermarkets", supermarkets); // Agregar la lista de supermercados al modelo
 
         // Obtener la lista de provincias
         List<Province> provinces = provinceDAO.listAllProvinces(); // Asegúrate de tener este método en tu DAO
         model.addAttribute("provinces", provinces); // Agregar la lista de provincias al modelo
+
+        List<SuperMarket> SuperMarket = superMarketDAO.listAllSupermarkets();
+        model.addAttribute("SuperMarket", SuperMarket); // Pasar la lista de provincias al modelo
 
         model.addAttribute("location", location); // Agregar la ubicación al modelo
         return "location-form"; // Nombre de la plantilla Thymeleaf para el formulario
@@ -102,6 +105,8 @@ public class LocationController {
         model.addAttribute("location", new Location()); // Crear un nuevo objeto Location
         List<Province> provinces = provinceDAO.listAllProvinces(); // Cargar la lista de provincias
         model.addAttribute("provinces", provinces); // Pasar la lista de provincias al modelo
+        List<SuperMarket> SuperMarket = superMarketDAO.listAllSupermarkets();
+        model.addAttribute("SuperMarket", SuperMarket); // Pasar la lista de provincias al modelo
         return "location-form"; // Nombre de la plantilla Thymeleaf para el formulario
     }
 

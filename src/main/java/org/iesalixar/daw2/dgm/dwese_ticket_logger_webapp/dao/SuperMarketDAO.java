@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SuperMarketDAO {
 
-    List<SuperMarket> listAllSuperMarkets();
+    List<SuperMarket> listAllSupermarkets();
     void insertSuperMarket(SuperMarket superMarket);
     void updateSuperMarket(SuperMarket superMarket) throws SQLException;
     void deleteSuperMarket(int id);

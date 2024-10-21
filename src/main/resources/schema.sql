@@ -15,10 +15,10 @@ CREATE TABLE IF NOT EXISTS provinces (
     FOREIGN KEY (id_region) REFERENCES regions(id)
 );
 
--- Crear la tabla 'supermarket'
+-- Crear tabla para los supermercados
 CREATE TABLE IF NOT EXISTS supermarkets (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
+    name VARCHAR(100) NOT NULL UNIQUE
 );
 
 -- Crear la tabla 'location'

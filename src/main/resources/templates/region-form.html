@@ -14,26 +14,16 @@
     <!-- Mostrar un mensaje de error si existe -->
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
-    <form th:action="${region.id == null} ? @{/regions/insert} : @{/regions/update}"
-          th:object="${region}" method="post" class="mt-4">
-        <input type="hidden" th:field="*{id}" />
-
+    <form th:action="@{/supermarkets/update}" th:object="${supermarket}" method="post" class="mt-4">
         <div class="mb-3">
-            <!-- Usamos la clave msg.region-form.code para el campo Código -->
-            <label for="code" class="form-label" th:text="#{msg.region-form.code}"></label>
-            <input type="text" th:field="*{code}" id="code" class="form-control"  />
-            <div th:if="${#fields.hasErrors('code')}" class="text-danger" th:errors="*{code}"></div>
+            <label for="id" class="form-label">ID</label>
+            <input type="text" th:field="*{id}" id="id" class="form-control" readonly/> <!-- o editable -->
         </div>
-
         <div class="mb-3">
-            <!-- Usamos la clave msg.region-form.name para el campo Nombre -->
-            <label for="name" class="form-label" th:text="#{msg.region-form.name}"></label>
-            <input type="text" th:field="*{name}" id="name" class="form-control"  />
-            <div th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}"></div>
+            <label for="name" class="form-label">Nombre</label>
+            <input type="text" th:field="*{name}" id="name" class="form-control" />
         </div>
-
-        <!-- Usamos la clave msg.region-form.create o msg.region-form.update dependiendo de si es agregar o editar -->
-        <button type="submit" class="btn btn-primary" th:text="#{msg.region-form.update}"></button>
+        <button type="submit" class="btn btn-primary">Actualizar</button>
     </form>
 
     <!-- Usamos la clave msg.region-form.returnback para el botón de volver a la lista -->

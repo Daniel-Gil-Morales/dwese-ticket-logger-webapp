@@ -37,12 +37,12 @@ public class LocationDAOImpl implements LocationDAO {
     }
 
     @Override
-    public void insertLocation(Location location) {
-        logger.info("Inserting location with address: {} and city: {}", location.getAddress(), location.getCity());
-        String sql = "INSERT INTO locations (address, city, province_id, supermarket_id) VALUES (?, ?, ?, ?)"; // Agrega el campo supermarket_id
-        int rowsAffected = jdbcTemplate.update(sql, location.getAddress(), location.getCity(), location.getProvince().getId(),
-                location.getSupermarket() != null ? location.getSupermarket().getId() : null); // Manejar el caso de null
-        logger.info("Inserted location. Rows affected: {}", rowsAffected);
+    public void insertLocation(Location location) throws SQLException {
+        logger.info("Insertando una nueva localización en la base de datos. Dirección: {}, Ciudad: {}",
+                location.getAddress(), location.getCity());
+        String sql = "INSERT INTO locations (address, city, supermarket_id, province_id) VALUES (?, ?, ?, ?)";
+        int rowsAffected = jdbcTemplate.update(sql, location.getAddress(), location.getCity(), location.getSupermarket().getId(), location.getProvince().getId());
+        logger.info("Localización insertada. Filas afectadas: {}", rowsAffected);
     }
 
     @Override

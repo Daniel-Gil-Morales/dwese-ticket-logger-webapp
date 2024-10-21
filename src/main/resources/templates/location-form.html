@@ -43,17 +43,16 @@
             <div th:if="${#fields.hasErrors('province')}" class="text-danger" th:errors="*{province}"></div>
         </div>
 
+        <!-- Desplegable para elegir el Supermercado -->
         <div class="mb-3">
-            <!-- Usamos la clave msg.location-form.supermarket para el campo Supermercado -->
             <label for="supermarket" class="form-label" th:text="#{msg.location-form.supermarket}"></label>
-            <select th:field="*{supermarket.id}" id="supermarket" class="form-select">
-                <option value="" th:text="#{msg.location-form.selectSupermarket}"></option>
-                <option th:each="supermarket : ${supermarkets}"
+            <select id="supermarket" th:field="*{supermarket.id}" class="form-select" required>
+                <option th:each="supermarket : ${SuperMarket}"
                         th:value="${supermarket.id}"
                         th:text="${supermarket.name}"
-                        th:selected="${supermarket.id == location.supermarket.id}"></option>
+                        th:selected="${supermarket.id == location.supermarket?.id}">
+                </option>
             </select>
-            <div th:if="${#fields.hasErrors('supermarket')}" class="text-danger" th:errors="*{supermarket}"></div>
         </div>
 
         <!-- Usamos la clave msg.location-form.create o msg.location-form.update dependiendo de si es agregar o editar -->

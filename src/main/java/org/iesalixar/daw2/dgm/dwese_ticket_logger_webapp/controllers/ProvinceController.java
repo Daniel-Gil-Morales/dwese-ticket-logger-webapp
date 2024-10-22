@@ -66,12 +66,16 @@ public class ProvinceController {
      * @return El nombre de la plantilla Thymeleaf para el formulario.
      */
     @GetMapping("/new")
-    public String showNewForm(Model model) throws SQLException {
+    public String showNewForm(Model model) {
         logger.info("Mostrando formulario para nueva provincia.");
-        model.addAttribute("province", new Province()); // Crear un nuevo objeto Province
-        List<Region> regions = regionDAO.listAllRegions(); // Cargar la lista de regiones
-        model.addAttribute("regions", regions); // Pasar la lista de regiones al modelo
-        return "province-form"; // Nombre de la plantilla Thymeleaf para el formulario
+        model.addAttribute("province", new Province());
+        try {
+            List<Region> regions = regionDAO.listAllRegions();
+            model.addAttribute("regions", regions);
+        } catch (SQLException e) {
+            logger.error("Error al cargar las regiones: {}", e.getMessage());
+        }
+        return "province-form";
     }
 
     /**

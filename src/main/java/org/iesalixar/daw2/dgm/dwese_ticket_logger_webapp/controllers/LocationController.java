@@ -143,12 +143,11 @@ public class LocationController {
      * @return Redirección a la lista de ubicaciones.
      */
     @PostMapping("/update")
-    public String updateLocation(@Valid @ModelAttribute("location") Location location,
-                                 BindingResult result, RedirectAttributes redirectAttributes, Locale locale) {
+    public String updateLocation(@Valid @ModelAttribute("location") Location location, BindingResult result, RedirectAttributes redirectAttributes, Locale locale) {
         logger.info("Actualizando ubicación con ID {}", location.getId());
         try {
             if (result.hasErrors()) {
-                return "location-form";  // Devuelve el formulario para mostrar los errores de validación
+                return "location-form";
             }
             locationDAO.updateLocation(location);
             logger.info("Ubicación con ID {} actualizada con éxito.", location.getId());
@@ -157,7 +156,7 @@ public class LocationController {
             String errorMessage = messageSource.getMessage("msg.location-controller.update.error", null, locale);
             redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
         }
-        return "redirect:/locations"; // Redirigir a la lista de ubicaciones
+        return "redirect:/locations";
     }
 
     /**

@@ -13,7 +13,7 @@
     <!-- Mostrar un mensaje de error si existe -->
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
-    <form th:action="@{/locations/update}" th:object="${location}" method="post" class="mt-4">
+    <form th:action="${location.id == null} ? @{/locations/insert} : @{/locations/update}" th:object="${location}" method="post" class="mt-4">
         <input type="hidden" th:field="*{id}" />
 
         <div class="mb-3">

@@ -1,6 +1,6 @@
 package org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao;
 
-import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.SuperMarket;
+import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Supermarket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -13,35 +13,35 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class SuperMarketDAOImpl implements SuperMarketDAO {
+public class SupermarketDAOImpl implements SupermarketDAO {
 
-    private static final Logger logger = LoggerFactory.getLogger(SuperMarketDAOImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(SupermarketDAOImpl.class);
 
     private final JdbcTemplate jdbcTemplate;
 
-    public SuperMarketDAOImpl(JdbcTemplate jdbcTemplate) {
+    public SupermarketDAOImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public List<SuperMarket> listAllSupermarkets() {
+    public List<Supermarket> listAllSupermarkets() {
         logger.info("Listando todos los supermercados desde la base de datos.");
         String sql = "SELECT * FROM supermarkets";
-        List<SuperMarket> supermarkets = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(SuperMarket.class));
+        List<Supermarket> supermarkets = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Supermarket.class));
         logger.info("Se han recuperado {} supermercados de la base de datos.", supermarkets.size());
         return supermarkets;
 
     }
 
     @Override
-    public void insertSuperMarket(SuperMarket supermarket) {
+    public void insertSupermarket(Supermarket supermarket) {
         logger.info("Insertando un nuevo supermercado con ID: {} y nombre: {}", supermarket.getId(), supermarket.getName());
         String sql = "INSERT INTO supermarkets (id, name) VALUES (?, ?)";
 
         int rowsAffected = jdbcTemplate.update(sql, supermarket.getId(), supermarket.getName());
     }
 
-    public void updateSuperMarket(SuperMarket supermarket) {
+    public void updateSupermarket(Supermarket supermarket) {
         logger.info("Updating supermarket with new id: {} and name: {}", supermarket.getId(), supermarket.getName());
         String sql = "UPDATE supermarkets SET id = ?, name = ? WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql, supermarket.getId(), supermarket.getName(), supermarket.getId());
@@ -49,7 +49,7 @@ public class SuperMarketDAOImpl implements SuperMarketDAO {
     }
 
     @Override
-    public void deleteSuperMarket(int id) {
+    public void deleteSupermarket(int id) {
         logger.info("Deleting supermarket with id: {}", id);
         String sql = "DELETE FROM supermarkets WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql, id);
@@ -57,11 +57,11 @@ public class SuperMarketDAOImpl implements SuperMarketDAO {
     }
 
     @Override
-    public SuperMarket getSuperMarketById(int id) {
+    public Supermarket getSupermarketById(int id) {
         logger.info("Retrieving supermarket by id: {}", id);
         String sql = "SELECT * FROM supermarkets WHERE id = ?";
         try {
-            SuperMarket superMarket = jdbcTemplate.queryForObject(sql, new SuperMarketRowMapper(), id);
+            Supermarket superMarket = jdbcTemplate.queryForObject(sql, new SupermarketRowMapper(), id);
             logger.info("Supermarket retrieved: {}", superMarket.getName());
             return superMarket;
         } catch (Exception e) {
@@ -70,10 +70,10 @@ public class SuperMarketDAOImpl implements SuperMarketDAO {
         }
     }
 
-    private static class SuperMarketRowMapper implements RowMapper<SuperMarket> {
+    private static class SupermarketRowMapper implements RowMapper<Supermarket> {
         @Override
-        public SuperMarket mapRow(ResultSet rs, int rowNum) throws SQLException {
-            SuperMarket superMarket = new SuperMarket();
+        public Supermarket mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Supermarket superMarket = new Supermarket();
             superMarket.setId(rs.getInt("id"));
             superMarket.setName(rs.getString("name"));
             return superMarket;

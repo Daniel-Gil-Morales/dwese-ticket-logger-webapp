@@ -2,7 +2,7 @@ package org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao;
 
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Location;
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Province;
-import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.SuperMarket; // Asegúrate de importar la entidad SuperMarket
+import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Supermarket; // Asegúrate de importar la entidad SuperMarket
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -100,7 +100,7 @@ public class LocationDAOImpl implements LocationDAO {
             province.setName(rs.getString("province_name"));
             location.setProvince(province);
 
-            SuperMarket supermarket = new SuperMarket();
+            Supermarket supermarket = new Supermarket();
             supermarket.setId(rs.getInt("supermarket_id"));
             supermarket.setName(rs.getString("supermarket_name"));
             location.setSupermarket(supermarket); // Establece el supermercado en la ubicación

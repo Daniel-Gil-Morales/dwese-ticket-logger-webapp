@@ -1,8 +1,8 @@
 package org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.controllers;
 
 import jakarta.validation.Valid;
-import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao.SuperMarketDAO; // Inyectar el DAO de SuperMarket
-import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.SuperMarket;
+import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao.SupermarketDAO;
+import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Supermarket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +23,12 @@ import java.util.Locale;
  */
 @Controller
 @RequestMapping("/supermarkets")
-public class SuperMarketController {
+public class SupermarketController {
 
-    private static final Logger logger = LoggerFactory.getLogger(SuperMarketController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SupermarketController.class);
 
     @Autowired
-    private SuperMarketDAO superMarketDAO; // Inyección de SuperMarketDAO
+    private SupermarketDAO supermarketDAO; // Inyección de SuperMarketDAO
 
     @Autowired
     private MessageSource messageSource;
@@ -41,8 +41,8 @@ public class SuperMarketController {
      */
     @GetMapping("")
     public String listSupermarkets(Model model) {
-        List<SuperMarket> listSuperMarkets = superMarketDAO.listAllSupermarkets();
-        model.addAttribute("listSupermarkets", listSuperMarkets);
+        List<Supermarket> listSupermarkets = supermarketDAO.listAllSupermarkets();
+        model.addAttribute("listSupermarkets", listSupermarkets);
         return "supermarket"; // Asegúrate de que este nombre coincide con tu plantilla
     }
 
@@ -55,7 +55,7 @@ public class SuperMarketController {
     @GetMapping("/new")
     public String showNewForm(Model model) {
         logger.info("Mostrando formulario para nuevo supermercado.");
-        model.addAttribute("supermarket", new SuperMarket()); // Crear un nuevo objeto SuperMarket
+        model.addAttribute("supermarket", new Supermarket()); // Crear un nuevo objeto SuperMarket
         return "supermarket-form"; // Nombre de la plantilla Thymeleaf para el formulario
     }
 
@@ -71,7 +71,7 @@ public class SuperMarketController {
         logger.info("Mostrando formulario de edición para el supermercado con ID {}", id);
 
         // Cargar el supermercado por ID
-        SuperMarket superMarket = superMarketDAO.getSuperMarketById(id);
+        Supermarket superMarket = supermarketDAO.getSupermarketById(id);
         if (superMarket == null) {
             logger.warn("No se encontró el supermercado con ID {}", id);
             return "redirect:/supermarkets"; // Redirigir si no se encuentra el supermercado
@@ -83,19 +83,19 @@ public class SuperMarketController {
 
 
     @PostMapping("/insert")
-    public String insertSupermarket(@Valid SuperMarket supermarket, BindingResult result, Model model, Locale locale) throws SQLException {
+    public String insertSupermarket(@Valid Supermarket supermarket, BindingResult result, Model model, Locale locale) throws SQLException {
         if (result.hasErrors()) {
             logger.warn("Errores en el formulario de inserción de supermercado: {}", result.getFieldErrors());
             return "supermarket-form";
         }
-        superMarketDAO.insertSuperMarket(supermarket);
+        supermarketDAO.insertSupermarket(supermarket);
         logger.info("Supermercado insertado correctamente: {}", supermarket.getName());
         return "redirect:/supermarkets";
     }
 
 
     @PostMapping("/update")
-    public String updateSupermarket(@Valid @ModelAttribute("supermarket") SuperMarket supermarket,
+    public String updateSupermarket(@Valid @ModelAttribute("supermarket") Supermarket supermarket,
                                     BindingResult result, Model model) throws SQLException {
         if (result.hasErrors()) {
             model.addAttribute("errorMessage", "Por favor corrige los errores en el formulario.");
@@ -105,7 +105,7 @@ public class SuperMarketController {
         // Aquí puedes añadir lógica para verificar si el ID ha cambiado
         // y manejarlo según sea necesario.
 
-        superMarketDAO.updateSuperMarket(supermarket); // Actualizar supermercado
+        supermarketDAO.updateSupermarket(supermarket); // Actualizar supermercado
         model.addAttribute("successMessage", "Supermercado actualizado correctamente.");
         return "redirect:/supermarkets"; // Redirigir a la lista de supermercados
     }
@@ -120,7 +120,7 @@ public class SuperMarketController {
     @PostMapping("/delete")
     public String deleteSuperMarket(@RequestParam("id") int id, RedirectAttributes redirectAttributes) {
         try {
-            superMarketDAO.deleteSuperMarket(id); // Asegúrate de que superMarketDAO esté inyectado correctamente
+            supermarketDAO.deleteSupermarket(id); // Asegúrate de que superMarketDAO esté inyectado correctamente
             redirectAttributes.addFlashAttribute("successMessage", "Supermercado eliminado con éxito.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar el supermercado: " + e.getMessage());

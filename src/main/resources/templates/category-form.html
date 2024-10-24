@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head ('Ticket Logger - Insertar/Actualizar Supermercado')"></head>
+<body>
+<!-- Incluir el fragmento del header -->
+<header th:replace="fragments/header :: header"></header>
+<main class="container mt-5">
+    <!-- Usa un th:switch para la lógica condicional del título -->
+    <div th:switch="${category.id == null}">
+        <h1 th:case="true" th:text="#{msg.category-form.add}">Add category</h1>
+        <h1 th:case="false" th:text="#{msg.category-form.edit}">Edit category</h1>
+    </div>
+
+    <!-- Muestra un mensaje de error si hay algún problema -->
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <!-- Formulario para insertar un supermercado -->
+    <form th:action="@{/categorys/insert}" th:if="${category.id == null}" th:object="${category}" method="post" class="mt-4">
+        <input type="hidden" th:field="*{id}" /> <!-- CORREGIDO -->
+
+        <!-- Campo para el nombre del supermercado -->
+        <div class="mb-3">
+            <label for="name-insert" class="form-label" th:text="#{msg.category-form.name}">Name:</label>
+            <input type="text" th:field="*{name}" id="name-insert" class="form-control" required />
+        </div>
+
+        <!-- Botón para guardar los cambios en inserción -->
+        <button type="submit" class="btn btn-primary">
+            <span th:text="#{msg.category-form.create}">Create</span>
+        </button>
+    </form>
+
+    <!-- Formulario para actualizar un supermercado -->
+    <form th:action="@{/categorys/update}" th:if="${category.id != null}" th:object="${category}" method="post" class="mt-4">
+        <input type="hidden" th:field="*{id}" /> <!-- CORREGIDO -->
+
+        <!-- Campo para el nombre del supermercado -->
+        <div class="mb-3">
+            <label for="name-update" class="form-label" th:text="#{msg.category-form.name}">Name:</label>
+            <input type="text" th:field="*{name}" id="name-update" class="form-control" required />
+        </div>
+
+        <!-- Botón para guardar los cambios en actualización -->
+        <button type="submit" class="btn btn-primary">
+            <span th:text="#{msg.category-form.update}">Update</span>
+        </button>
+    </form>
+
+    <!-- Volver a la lista de supermercados -->
+    <a href="#" th:href="@{/categorys}" class="btn btn-secondary mt-3" th:text="#{msg.category-form.returnback}">Back to List</a>
+</main>
+<!-- Incluir el fragmento del footer -->
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Supermarket {
+public class SuperMarket {
 
     private Integer id;
 
@@ -21,7 +21,7 @@ public class Supermarket {
     @Size(max = 100, message = "{msg.supermarket.name.size}")
     private String name;
 
-    public Supermarket(String name){
+    public SuperMarket(String name){
         this.name=name;
     }
 }

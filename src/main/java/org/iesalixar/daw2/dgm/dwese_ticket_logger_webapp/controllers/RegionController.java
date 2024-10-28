@@ -1,7 +1,9 @@
 package org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.controllers;
 
 import jakarta.validation.Valid;
+import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao.CategoryDAO;
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao.RegionDAO;
+import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Category;
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Region;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,21 +123,20 @@ public class RegionController {
      * @param redirectAttributes Atributos para mensajes flash de redirección.
      * @return Redirección a la lista de regiones.
      */
+
+    @Autowired
+    private CategoryDAO categoryDAO;
+
     @PostMapping("/update")
-    public String updateRegion(@Valid @ModelAttribute("region") Region region, BindingResult result, RedirectAttributes redirectAttributes, Locale locale) {
-        logger.info("Actualizando región con ID {}", region.getId());
-        if (result.hasErrors()) {
-            return "region-form";  // Devuelve el formulario para mostrar los errores de validación
+    public String updateCategory(@ModelAttribute Category category, RedirectAttributes redirectAttributes) {
+        if (categoryDAO.existsCategoryByNameAndNotId(category.getName(), category.getId())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Ya existe una categoría con este nombre.");
+            return "redirect:/categories/edit/" + category.getId(); // Regresar a la página de edición
         }
-        if (regionDAO.existsRegionByCodeAndNotId(region.getCode(), region.getId())) {
-            logger.warn("El código de la región {} ya existe para otra región.", region.getCode());
-            String errorMessage = messageSource.getMessage("msg.region-controller.update.codeExist", null, locale);
-            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
-            return "redirect:/regions/edit?id=" + region.getId();
-        }
-        regionDAO.updateRegion(region);
-        logger.info("Región con ID {} actualizada con éxito.", region.getId());
-        return "redirect:/regions"; // Redirigir a la lista de regiones
+
+        categoryDAO.updateCategory(category);
+        redirectAttributes.addFlashAttribute("successMessage", "Categoría actualizada correctamente.");
+        return "redirect:/categories"; // Redirigir a la lista de categorías
     }
 
     @PostMapping("/delete")

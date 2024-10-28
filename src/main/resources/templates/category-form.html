@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head ('Ticket Logger - Insertar/Actualizar Supermercado')"></head>
+<head th:replace="fragments/head :: head ('Ticket Logger - Insertar/Actualizar Categoría')"></head>
 <body>
 <!-- Incluir el fragmento del header -->
 <header th:replace="fragments/header :: header"></header>
@@ -17,13 +17,23 @@
     </div>
 
     <!-- Formulario para insertar un supermercado -->
-    <form th:action="@{/categorys/insert}" th:if="${category.id == null}" th:object="${category}" method="post" class="mt-4">
-        <input type="hidden" th:field="*{id}" /> <!-- CORREGIDO -->
+    <form th:action="@{/categories/insert}" th:if="${category.id == null}" th:object="${category}" method="post" class="mt-4">
+        <input type="hidden" th:field="*{id}" />
 
-        <!-- Campo para el nombre del supermercado -->
+        <!-- Campo para el nombre de la categoría -->
         <div class="mb-3">
             <label for="name-insert" class="form-label" th:text="#{msg.category-form.name}">Name:</label>
             <input type="text" th:field="*{name}" id="name-insert" class="form-control" required />
+        </div>
+
+        <!-- Campo para ID Padre -->
+        <div class="mb-3">
+            <label for="parent-id" class="form-label" th:text="#{msg.category-form.parentId}">Parent ID:</label>
+            <select th:field="*{parentId}" id="parent-id" class="form-control" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
         </div>
 
         <!-- Botón para guardar los cambios en inserción -->
@@ -33,13 +43,23 @@
     </form>
 
     <!-- Formulario para actualizar un supermercado -->
-    <form th:action="@{/categorys/update}" th:if="${category.id != null}" th:object="${category}" method="post" class="mt-4">
-        <input type="hidden" th:field="*{id}" /> <!-- CORREGIDO -->
+    <form th:action="@{/categories/update}" th:if="${category.id != null}" th:object="${category}" method="post" class="mt-4">
+        <input type="hidden" th:field="*{id}" />
 
-        <!-- Campo para el nombre del supermercado -->
+        <!-- Campo para el nombre de la categoría -->
         <div class="mb-3">
             <label for="name-update" class="form-label" th:text="#{msg.category-form.name}">Name:</label>
             <input type="text" th:field="*{name}" id="name-update" class="form-control" required />
+        </div>
+
+        <!-- Campo para ID Padre -->
+        <div class="mb-3">
+            <label for="parent-id-update" class="form-label" th:text="#{msg.category-form.parentId}">Parent ID:</label>
+            <select th:field="*{parentId}" id="parent-id-update" class="form-control" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
         </div>
 
         <!-- Botón para guardar los cambios en actualización -->
@@ -48,8 +68,8 @@
         </button>
     </form>
 
-    <!-- Volver a la lista de supermercados -->
-    <a href="#" th:href="@{/categorys}" class="btn btn-secondary mt-3" th:text="#{msg.category-form.returnback}">Back to List</a>
+    <!-- Volver a la lista de categorías -->
+    <a href="#" th:href="@{/categories}" class="btn btn-secondary mt-3" th:text="#{msg.category-form.returnback}">Back to List</a>
 </main>
 <!-- Incluir el fragmento del footer -->
 <footer th:replace="fragments/footer :: footer"></footer>

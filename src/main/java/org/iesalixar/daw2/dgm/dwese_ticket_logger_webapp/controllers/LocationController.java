@@ -3,10 +3,10 @@ package org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.controllers;
 import jakarta.validation.Valid;
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao.LocationDAO;
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao.ProvinceDAO;
-import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao.SupermarketDAO;
+import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.dao.SuperMarketDAO;
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Location;
 import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Province;
-import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.Supermarket;
+import org.iesalixar.daw2.dgm.dwese_ticket_logger_webapp.entity.SuperMarket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class LocationController {
     private static final Logger logger = LoggerFactory.getLogger(LocationController.class);
 
     @Autowired
-    private SupermarketDAO supermarketDAO;
+    private SuperMarketDAO supermarketDAO;
 
     @Autowired
     private LocationDAO locationDAO;
@@ -79,14 +79,14 @@ public class LocationController {
         }
 
         // Obtener la lista de supermercados para el select
-        List<Supermarket> supermarkets = supermarketDAO.listAllSupermarkets();
+        List<SuperMarket> supermarkets = supermarketDAO.listAllSuperMarkets();
         model.addAttribute("supermarkets", supermarkets); // Agregar la lista de supermercados al modelo
 
         // Obtener la lista de provincias
         List<Province> provinces = provinceDAO.listAllProvinces(); // Asegúrate de tener este método en tu DAO
         model.addAttribute("provinces", provinces); // Agregar la lista de provincias al modelo
 
-        List<Supermarket> SuperMarket = supermarketDAO.listAllSupermarkets();
+        List<SuperMarket> SuperMarket = supermarketDAO.listAllSuperMarkets();
         model.addAttribute("SuperMarket", SuperMarket); // Pasar la lista de provincias al modelo
 
         model.addAttribute("location", location); // Agregar la ubicación al modelo
@@ -105,7 +105,7 @@ public class LocationController {
         model.addAttribute("location", new Location()); // Crear un nuevo objeto Location
         List<Province> provinces = provinceDAO.listAllProvinces(); // Cargar la lista de provincias
         model.addAttribute("provinces", provinces); // Pasar la lista de provincias al modelo
-        List<Supermarket> SuperMarket = supermarketDAO.listAllSupermarkets();
+        List<SuperMarket> SuperMarket = supermarketDAO.listAllSuperMarkets();
         model.addAttribute("SuperMarket", SuperMarket); // Pasar la lista de provincias al modelo
         return "location-form"; // Nombre de la plantilla Thymeleaf para el formulario
     }
